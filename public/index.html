@@ -803,10 +803,22 @@
   async function loadConfig() {
     try {
       const res = await fetch(`/api/config?password=${encodeURIComponent(password)}`);
-      config = res.ok ? (await res.json()) : {};
+      if (!res.ok) { showToast('Erreur chargement config : ' + res.status, true); return; }
+      const text = await res.text();
+      try {
+        config = text ? JSON.parse(text) : {};
+      } catch(e) {
+        config = {};
+      }
+      // S'assurer que les champs existent
+      if (!config.persona) config.persona = '';
+      if (!config.knowledge) config.knowledge = [];
+      if (!config.sessionMessages) config.sessionMessages = 10;
+      if (!config.groqModel) config.groqModel = 'llama-3.3-70b-versatile';
+      if (!config.serverInfo) config.serverInfo = '';
       renderPersonality();
     } catch (e) {
-      showToast('Erreur chargement config', true);
+      showToast('Erreur : ' + e.message, true);
     }
   }
 
