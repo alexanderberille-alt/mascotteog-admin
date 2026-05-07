@@ -1,0 +1,13 @@
+{
+  "name": "mascotteog-admin",
+  "version": "1.0.0",
+  "description": "Panneau admin pour MascotteOG",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1"
+  }
+}
