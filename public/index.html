@@ -248,9 +248,18 @@
 
   // ── LOAD CONFIG ──
   async function loadConfig() {
-    const res = await fetch(`/api/config?password=${password}`);
-    config = await res.json();
-    renderPanel();
+    try {
+      const res = await fetch(`/api/config?password=${encodeURIComponent(password)}`);
+      if (!res.ok) {
+        showToast('Erreur chargement config : ' + res.status, true);
+        return;
+      }
+      const text = await res.text();
+      config = text ? JSON.parse(text) : {};
+      renderPanel();
+    } catch (e) {
+      showToast('Erreur : ' + e.message, true);
+    }
   }
 
   // ── RENDER ──
