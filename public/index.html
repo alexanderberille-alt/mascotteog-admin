@@ -5,11 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MascotteOG — Panneau Admin</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0c10;
+      --surface: #10141c;
+      --surface2: #161c28;
+      --border: #1e2535;
+      --border-bright: #2a3550;
+      --text: #d4ddf0;
+      --text-muted: #5a6a8a;
+      --text-dim: #3a4a6a;
+      --accent: #4f8fff;
+      --accent-dim: #1a2f55;
+      --green: #2dd4a0;
+      --green-dim: #0d3028;
+      --red: #f05070;
+      --red-dim: #3a0f1a;
+      --gold: #f0b040;
+      --gold-dim: #3a2808;
+      --purple: #a070f0;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
     }
 
@@ -19,86 +42,184 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(79,143,255,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(160,112,240,0.06) 0%, transparent 70%),
+        var(--bg);
     }
+
     .login-box {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 40px;
-      width: 360px;
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 380px;
       text-align: center;
+      box-shadow: 0 0 60px rgba(79,143,255,0.08), 0 24px 48px rgba(0,0,0,0.4);
     }
-    .login-box h1 { font-size: 1.6rem; margin-bottom: 8px; }
-    .login-box p { color: #8b949e; margin-bottom: 24px; font-size: 0.9rem; }
+
+    .login-logo {
+      font-size: 2.8rem;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 20px rgba(79,143,255,0.4));
+    }
+
+    .login-box h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .login-box p { color: var(--text-muted); margin-bottom: 32px; font-size: 0.88rem; }
+
     .login-box input {
       width: 100%;
-      padding: 10px 14px;
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #e6edf3;
-      font-size: 1rem;
-      margin-bottom: 14px;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border-bright);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
     }
+    .login-box input:focus { outline: none; border-color: var(--accent); }
+
     .login-box button {
       width: 100%;
-      padding: 10px;
-      background: #238636;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       color: white;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: 0.03em;
     }
-    .login-box button:hover { background: #2ea043; }
-    .error-msg { color: #f85149; font-size: 0.85rem; margin-top: 8px; }
+    .login-box button:hover { opacity: 0.9; transform: translateY(-1px); }
+    .error-msg { color: var(--red); font-size: 0.82rem; margin-top: 10px; }
 
-    /* ── LAYOUT ── */
-    #app { display: none; }
+    /* ── APP ── */
+    #app { display: none; min-height: 100vh; }
+
     header {
-      background: #161b22;
-      border-bottom: 1px solid #30363d;
-      padding: 14px 30px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: 58px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    header h1 { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
-    header span { font-size: 1.4rem; }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-logo { font-size: 1.4rem; }
+
+    .header-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .header-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
     .save-btn {
-      background: #238636;
+      background: linear-gradient(135deg, var(--green), #1aa880);
       border: none;
       border-radius: 8px;
       color: white;
       padding: 8px 20px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: 0.03em;
     }
-    .save-btn:hover { background: #2ea043; }
-    .save-btn:disabled { background: #30363d; cursor: not-allowed; }
+    .save-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .save-btn:disabled { background: var(--border); color: var(--text-dim); cursor: not-allowed; transform: none; }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 20px 32px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── PAGES ── */
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
 
     .container {
-      max-width: 960px;
-      margin: 30px auto;
-      padding: 0 20px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 32px;
       display: grid;
       gap: 20px;
     }
 
+    /* ── CARDS ── */
     .card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       padding: 24px;
+      transition: border-color 0.2s;
     }
-    .card h2 {
-      font-size: 1rem;
-      color: #8b949e;
+    .card:hover { border-color: var(--border-bright); }
+
+    .card-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 16px;
+      letter-spacing: 0.1em;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -106,39 +227,47 @@
 
     textarea {
       width: 100%;
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #e6edf3;
-      font-size: 0.92rem;
-      padding: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.88rem;
+      padding: 14px;
       resize: vertical;
-      font-family: inherit;
-      line-height: 1.5;
+      font-family: 'DM Mono', monospace;
+      line-height: 1.6;
+      transition: border-color 0.2s;
     }
-    textarea:focus { outline: none; border-color: #58a6ff; }
+    textarea:focus { outline: none; border-color: var(--accent); }
 
     .field-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
+
     .field-group label {
       display: block;
-      font-size: 0.85rem;
-      color: #8b949e;
-      margin-bottom: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
     }
+
     .field-group input {
       width: 100%;
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #e6edf3;
-      font-size: 0.92rem;
-      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.9rem;
+      padding: 10px 14px;
+      font-family: 'DM Mono', monospace;
+      transition: border-color 0.2s;
     }
-    .field-group input:focus { outline: none; border-color: #58a6ff; }
+    .field-group input:focus { outline: none; border-color: var(--accent); }
 
     .knowledge-item {
       display: flex;
@@ -147,49 +276,418 @@
       align-items: flex-start;
     }
     .knowledge-item textarea { flex: 1; min-height: 60px; }
+
     .del-btn {
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      color: #f85149;
-      padding: 6px 10px;
-      cursor: pointer;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-    .del-btn:hover { background: #30363d; }
-    .add-btn {
-      background: #21262d;
-      border: 1px solid #30363d;
+      background: var(--red-dim);
+      border: 1px solid rgba(240,80,112,0.2);
       border-radius: 8px;
-      color: #58a6ff;
-      padding: 8px 16px;
+      color: var(--red);
+      padding: 7px 11px;
       cursor: pointer;
       font-size: 0.9rem;
-      margin-top: 6px;
+      flex-shrink: 0;
+      transition: background 0.2s;
+      font-family: 'Syne', sans-serif;
     }
-    .add-btn:hover { background: #30363d; }
+    .del-btn:hover { background: rgba(240,80,112,0.2); }
+
+    .add-btn {
+      background: var(--accent-dim);
+      border: 1px solid rgba(79,143,255,0.2);
+      border-radius: 8px;
+      color: var(--accent);
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 6px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .add-btn:hover { background: rgba(79,143,255,0.2); }
+
+    /* ── PROFILS ── */
+    .profiles-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .profile-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .profile-card:hover { border-color: var(--border-bright); }
+
+    .profile-header {
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .profile-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-dim), var(--border-bright));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .profile-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .profile-level-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-top: 2px;
+      display: inline-block;
+    }
+
+    .profile-header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .incident-badge {
+      font-size: 0.75rem;
+      color: var(--red);
+      background: var(--red-dim);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .chevron {
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+    }
+    .profile-card.expanded .chevron { transform: rotate(180deg); }
+
+    .profile-body {
+      display: none;
+      padding: 0 18px 18px;
+      border-top: 1px solid var(--border);
+    }
+    .profile-card.expanded .profile-body { display: block; }
+
+    /* Barre d'amitié */
+    .friendship-section { margin-top: 16px; }
+
+    .friendship-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .friendship-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .friendship-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .friendship-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s, background 0.3s;
+    }
+
+    .friendship-value {
+      font-size: 0.85rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--text);
+      font-weight: 500;
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .friendship-controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    .friendship-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+    .friendship-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .friendship-slider::-webkit-slider-thumb:hover { background: var(--purple); }
+
+    .apply-btn {
+      background: var(--accent-dim);
+      border: 1px solid rgba(79,143,255,0.3);
+      border-radius: 7px;
+      color: var(--accent);
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .apply-btn:hover { background: rgba(79,143,255,0.2); }
+
+    /* Incidents */
+    .section-title {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 16px 0 10px;
+    }
+
+    .incidents-list { display: grid; gap: 6px; }
+
+    .incident-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--red-dim);
+      border: 1px solid rgba(240,80,112,0.15);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+
+    .incident-text {
+      font-size: 0.82rem;
+      color: var(--text);
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .incident-date {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: 'DM Mono', monospace;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .incident-del {
+      background: none;
+      border: none;
+      color: var(--red);
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px 4px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
+    }
+    .incident-del:hover { opacity: 1; }
+
+    .empty-state {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-style: italic;
+      padding: 6px 0;
+    }
+
+    /* Vocabulaire membre */
+    .vocab-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .vocab-tag {
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vocab-tag-count {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .vocab-del {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.7rem;
+      padding: 0;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+    .vocab-del:hover { color: var(--red); }
+
+    /* ── VOCABULAIRE GLOBAL ── */
+    .vocab-global-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .vocab-global-tag {
+      background: var(--surface2);
+      border: 1px solid var(--border-bright);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 0.2s;
+    }
+    .vocab-global-tag:hover { border-color: var(--accent); }
+
+    .vocab-global-count {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .vocab-global-del {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.75rem;
+      padding: 0;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+    .vocab-global-del:hover { color: var(--red); }
+
+    /* ── LOADING / TOAST ── */
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: #238636;
-      color: white;
+      background: var(--green-dim);
+      border: 1px solid rgba(45,212,160,0.3);
+      color: var(--green);
       padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 0.9rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
       opacity: 0;
-      transition: opacity 0.3s;
+      transform: translateY(8px);
+      transition: opacity 0.25s, transform 0.25s;
       pointer-events: none;
+      z-index: 1000;
     }
-    .toast.show { opacity: 1; }
-    .toast.error { background: #b91c1c; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error {
+      background: var(--red-dim);
+      border-color: rgba(240,80,112,0.3);
+      color: var(--red);
+    }
 
-    .loading {
+    /* Niveau d'amitié couleurs */
+    .level-hostile { color: var(--red); background: var(--red-dim); }
+    .level-neutre { color: var(--text-muted); background: var(--border); }
+    .level-ami { color: var(--accent); background: var(--accent-dim); }
+    .level-proche { color: var(--purple); background: rgba(160,112,240,0.15); }
+    .level-meilleur { color: var(--gold); background: var(--gold-dim); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+
+    .profiles-search {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.88rem;
+      padding: 10px 14px;
+      width: 100%;
+      font-family: 'Syne', sans-serif;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .profiles-search:focus { outline: none; border-color: var(--accent); }
+    .profiles-search::placeholder { color: var(--text-dim); }
+
+    .profiles-empty {
       text-align: center;
-      padding: 60px;
-      color: #8b949e;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
     }
   </style>
 </head>
@@ -198,7 +696,8 @@
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
-    <h1>🐉 MascotteOG</h1>
+    <div class="login-logo">🐉</div>
+    <h1>MascotteOG</h1>
     <p>Panneau d'administration</p>
     <input type="password" id="pw-input" placeholder="Mot de passe" />
     <button onclick="login()">Connexion</button>
@@ -209,12 +708,53 @@
 <!-- APP -->
 <div id="app">
   <header>
-    <h1><span>🐉</span> MascotteOG — Admin</h1>
+    <div class="header-left">
+      <div class="header-logo">🐉</div>
+      <div>
+        <div class="header-title">MascotteOG</div>
+        <div class="header-sub">Panneau Admin · HDR</div>
+      </div>
+    </div>
     <button class="save-btn" id="save-btn" onclick="saveConfig()">💾 Sauvegarder</button>
   </header>
 
-  <div class="container" id="main-content">
-    <div class="loading">Chargement de la configuration...</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('personality', this)">🎭 Personnalité</button>
+    <button class="tab-btn" onclick="switchTab('profiles', this)">👥 Profils membres</button>
+    <button class="tab-btn" onclick="switchTab('vocabulary', this)">💬 Vocabulaire global</button>
+  </div>
+
+  <!-- TAB: PERSONNALITÉ -->
+  <div id="tab-personality" class="tab-page active">
+    <div class="container" id="personality-content">
+      <div class="loading"><div class="spinner"></div>Chargement...</div>
+    </div>
+  </div>
+
+  <!-- TAB: PROFILS -->
+  <div id="tab-profiles" class="tab-page">
+    <div class="container">
+      <div class="card">
+        <div class="card-title">👥 Profils membres</div>
+        <input class="profiles-search" type="text" id="profiles-search" placeholder="Rechercher un membre..." oninput="filterProfiles(this.value)" />
+        <div class="profiles-grid" id="profiles-list">
+          <div class="loading"><div class="spinner"></div>Chargement des profils...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: VOCABULAIRE -->
+  <div id="tab-vocabulary" class="tab-page">
+    <div class="container">
+      <div class="card">
+        <div class="card-title">💬 Vocabulaire global du serveur</div>
+        <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:16px;">Mots que le bot intègre naturellement dans ses réponses à tout le monde.</p>
+        <div class="vocab-global-grid" id="vocab-global-list">
+          <div class="loading"><div class="spinner"></div>Chargement...</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -223,6 +763,7 @@
 <script>
   let password = '';
   let config = {};
+  let profilesData = { memberProfiles: {}, serverVocabulary: {} };
 
   // ── LOGIN ──
   document.getElementById('pw-input').addEventListener('keydown', e => {
@@ -241,66 +782,68 @@
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
       loadConfig();
+      loadProfiles();
     } else {
       document.getElementById('login-error').textContent = 'Mot de passe incorrect ❌';
     }
+  }
+
+  // ── TABS ──
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+
+    const saveBtn = document.getElementById('save-btn');
+    saveBtn.style.display = name === 'personality' ? 'block' : 'none';
   }
 
   // ── LOAD CONFIG ──
   async function loadConfig() {
     try {
       const res = await fetch(`/api/config?password=${encodeURIComponent(password)}`);
-      if (!res.ok) {
-        showToast('Erreur chargement config : ' + res.status, true);
-        return;
-      }
-      const text = await res.text();
-      config = text ? JSON.parse(text) : {};
-      renderPanel();
+      config = res.ok ? (await res.json()) : {};
+      renderPersonality();
     } catch (e) {
-      showToast('Erreur : ' + e.message, true);
+      showToast('Erreur chargement config', true);
     }
   }
 
-  // ── RENDER ──
-  function renderPanel() {
-    const c = document.getElementById('main-content');
+  // ── RENDER PERSONNALITÉ ──
+  function renderPersonality() {
+    const c = document.getElementById('personality-content');
     c.innerHTML = `
-      <!-- Personnalité -->
       <div class="card">
-        <h2>🎭 Personnalité (System Prompt)</h2>
-        <textarea id="persona" rows="10" placeholder="Décris la personnalité de MascotteOG...">${config.persona || ''}</textarea>
+        <div class="card-title">🎭 Personnalité (System Prompt)</div>
+        <textarea id="persona" rows="12">${config.persona || ''}</textarea>
       </div>
 
-      <!-- Connaissances -->
       <div class="card">
-        <h2>📚 Base de connaissances</h2>
+        <div class="card-title">📚 Base de connaissances</div>
         <div id="knowledge-list"></div>
         <button class="add-btn" onclick="addKnowledge()">+ Ajouter une connaissance</button>
       </div>
 
-      <!-- Paramètres -->
       <div class="card">
-        <h2>⚙️ Paramètres</h2>
+        <div class="card-title">⚙️ Paramètres</div>
         <div class="field-row">
           <div class="field-group">
-            <label>Messages de session (après mention)</label>
+            <label>Messages de session</label>
             <input type="number" id="sessionMessages" value="${config.sessionMessages || 10}" min="1" max="50" />
           </div>
           <div class="field-group">
             <label>Modèle Groq</label>
-            <input type="text" id="groqModel" value="${config.groqModel || 'llama3-8b-8192'}" />
+            <input type="text" id="groqModel" value="${config.groqModel || 'llama-3.3-70b-versatile'}" />
           </div>
         </div>
       </div>
 
-      <!-- Infos serveur -->
       <div class="card">
-        <h2>🏰 Infos serveur HDR</h2>
-        <textarea id="serverInfo" rows="5" placeholder="Infos sur la guilde, le serveur Minecraft, les règles...">${config.serverInfo || ''}</textarea>
+        <div class="card-title">🏰 Infos serveur HDR</div>
+        <textarea id="serverInfo" rows="4">${config.serverInfo || ''}</textarea>
       </div>
     `;
-
     renderKnowledge();
   }
 
@@ -312,7 +855,7 @@
         <textarea rows="3" onchange="updateKnowledge(${i}, this.value)">${k}</textarea>
         <button class="del-btn" onclick="removeKnowledge(${i})">🗑</button>
       </div>
-    `).join('');
+    `).join('') || '<p style="color:var(--text-dim);font-size:0.82rem;margin-bottom:10px;">Aucune connaissance ajoutée.</p>';
   }
 
   function addKnowledge() {
@@ -320,17 +863,10 @@
     config.knowledge.push('');
     renderKnowledge();
   }
+  function removeKnowledge(i) { config.knowledge.splice(i, 1); renderKnowledge(); }
+  function updateKnowledge(i, val) { config.knowledge[i] = val; }
 
-  function removeKnowledge(i) {
-    config.knowledge.splice(i, 1);
-    renderKnowledge();
-  }
-
-  function updateKnowledge(i, val) {
-    config.knowledge[i] = val;
-  }
-
-  // ── SAVE ──
+  // ── SAVE CONFIG ──
   async function saveConfig() {
     const btn = document.getElementById('save-btn');
     btn.disabled = true;
@@ -349,14 +885,281 @@
 
     btn.disabled = false;
     btn.textContent = '💾 Sauvegarder';
+    res.ok ? showToast('✅ Configuration sauvegardée !') : showToast('❌ Erreur lors de la sauvegarde', true);
+  }
 
-    if (res.ok) {
-      showToast('✅ Configuration sauvegardée !');
-    } else {
-      showToast('❌ Erreur lors de la sauvegarde', true);
+  // ── LOAD PROFILS ──
+  async function loadProfiles() {
+    try {
+      const res = await fetch(`/api/profiles?password=${encodeURIComponent(password)}`);
+      if (res.ok) {
+        profilesData = await res.json();
+      }
+      renderProfiles();
+      renderVocabularyGlobal();
+    } catch (e) {
+      document.getElementById('profiles-list').innerHTML = '<div class="profiles-empty">Erreur de chargement des profils.</div>';
     }
   }
 
+  // ── RENDER PROFILS ──
+  function getLevelInfo(level) {
+    if (level <= -3) return { label: 'Hostile', cls: 'level-hostile', color: 'var(--red)' };
+    if (level <= 0)  return { label: 'Inconnu', cls: 'level-neutre', color: 'var(--text-muted)' };
+    if (level <= 5)  return { label: 'Membre', cls: 'level-neutre', color: 'var(--text-muted)' };
+    if (level <= 12) return { label: 'Ami', cls: 'level-ami', color: 'var(--accent)' };
+    if (level <= 17) return { label: 'Proche', cls: 'level-proche', color: 'var(--purple)' };
+    return { label: 'Meilleur ami', cls: 'level-meilleur', color: 'var(--gold)' };
+  }
+
+  function getFriendshipFill(level) {
+    // -5 à 20 → 0% à 100%
+    const pct = ((level + 5) / 25) * 100;
+    const color = level <= -3 ? 'var(--red)' : level <= 5 ? 'var(--text-muted)' : level <= 12 ? 'var(--accent)' : level <= 17 ? 'var(--purple)' : 'var(--gold)';
+    return { pct, color };
+  }
+
+  let allProfiles = [];
+
+  function renderProfiles(filter = '') {
+    const container = document.getElementById('profiles-list');
+    const profiles = Object.entries(profilesData.memberProfiles || {});
+
+    allProfiles = profiles;
+
+    const filtered = filter
+      ? profiles.filter(([id, p]) => p.username?.toLowerCase().includes(filter.toLowerCase()))
+      : profiles;
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="profiles-empty">Aucun profil trouvé.</div>';
+      return;
+    }
+
+    // Trier par niveau d'amitié décroissant
+    filtered.sort((a, b) => b[1].friendshipLevel - a[1].friendshipLevel);
+
+    container.innerHTML = filtered.map(([userId, profile]) => {
+      const level = profile.friendshipLevel || 0;
+      const levelInfo = getLevelInfo(level);
+      const fill = getFriendshipFill(level);
+      const incidents = profile.incidents || [];
+      const vocab = profile.vocabulary || {};
+      const topVocab = Object.entries(vocab).sort((a,b) => b[1]-a[1]).slice(0, 15);
+
+      return `
+        <div class="profile-card" id="pcard-${userId}">
+          <div class="profile-header" onclick="toggleProfile('${userId}')">
+            <div class="profile-header-left">
+              <div class="profile-avatar">${(profile.username || '?')[0].toUpperCase()}</div>
+              <div>
+                <div class="profile-name">${profile.username || 'Inconnu'}</div>
+                <span class="profile-level-badge ${levelInfo.cls}">${levelInfo.label} · ${level}/20</span>
+              </div>
+            </div>
+            <div class="profile-header-right">
+              ${incidents.length > 0 ? `<span class="incident-badge">⚠️ ${incidents.length} incident${incidents.length > 1 ? 's' : ''}</span>` : ''}
+              <span class="chevron">▼</span>
+            </div>
+          </div>
+          <div class="profile-body">
+            <!-- Amitié -->
+            <div class="friendship-section">
+              <div class="friendship-label">Niveau d'amitié</div>
+              <div class="friendship-bar-wrap">
+                <div class="friendship-bar">
+                  <div class="friendship-fill" style="width:${fill.pct}%;background:${fill.color}"></div>
+                </div>
+                <div class="friendship-value" id="flabel-${userId}">${level}/20</div>
+              </div>
+              <div class="friendship-controls">
+                <input type="range" class="friendship-slider" min="-5" max="20" value="${level}"
+                  oninput="previewFriendship('${userId}', this.value)"
+                  id="fslider-${userId}" />
+                <button class="apply-btn" onclick="applyFriendship('${userId}')">Appliquer</button>
+              </div>
+            </div>
+
+            <!-- Incidents -->
+            <div class="section-title">⚠️ Incidents (${incidents.length})</div>
+            <div class="incidents-list" id="incidents-${userId}">
+              ${incidents.length === 0
+                ? '<div class="empty-state">Aucun incident enregistré.</div>'
+                : incidents.map((inc, i) => `
+                  <div class="incident-item" id="incident-${userId}-${i}">
+                    <div>
+                      <div class="incident-text">${inc.description || 'Incident sans description'}</div>
+                      <div class="incident-date">${new Date(inc.date).toLocaleString('fr-FR')}</div>
+                    </div>
+                    <button class="incident-del" onclick="deleteIncident('${userId}', ${i})" title="Supprimer">✕</button>
+                  </div>
+                `).join('')
+              }
+            </div>
+
+            <!-- Vocabulaire membre -->
+            <div class="section-title">💬 Vocabulaire spécifique (${topVocab.length} mots)</div>
+            <div class="vocab-tags" id="vocab-${userId}">
+              ${topVocab.length === 0
+                ? '<div class="empty-state">Aucun vocabulaire collecté.</div>'
+                : topVocab.map(([word, count]) => `
+                  <span class="vocab-tag">
+                    ${word}
+                    <span class="vocab-tag-count">×${count}</span>
+                    <button class="vocab-del" onclick="deleteMemberVocab('${userId}', '${word}')" title="Supprimer">✕</button>
+                  </span>
+                `).join('')
+              }
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleProfile(userId) {
+    const card = document.getElementById('pcard-' + userId);
+    card.classList.toggle('expanded');
+  }
+
+  function filterProfiles(value) {
+    renderProfiles(value);
+  }
+
+  function previewFriendship(userId, value) {
+    const level = parseInt(value);
+    const label = document.getElementById('flabel-' + userId);
+    const fill = getFriendshipFill(level);
+    label.textContent = level + '/20';
+    // Mettre à jour la barre visuelle
+    const bar = document.querySelector(`#pcard-${userId} .friendship-fill`);
+    if (bar) {
+      bar.style.width = fill.pct + '%';
+      bar.style.background = fill.color;
+    }
+  }
+
+  async function applyFriendship(userId) {
+    const slider = document.getElementById('fslider-' + userId);
+    const level = parseInt(slider.value);
+
+    const res = await fetch(`/api/profiles/${userId}/friendship?password=${password}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ level })
+    });
+
+    if (res.ok) {
+      profilesData.memberProfiles[userId].friendshipLevel = level;
+      showToast('✅ Niveau d\'amitié mis à jour !');
+      // Rerender juste le badge
+      const levelInfo = getLevelInfo(level);
+      const badge = document.querySelector(`#pcard-${userId} .profile-level-badge`);
+      if (badge) {
+        badge.textContent = `${levelInfo.label} · ${level}/20`;
+        badge.className = `profile-level-badge ${levelInfo.cls}`;
+      }
+    } else {
+      showToast('❌ Erreur lors de la mise à jour', true);
+    }
+  }
+
+  async function deleteIncident(userId, index) {
+    const res = await fetch(`/api/profiles/${userId}/incidents/${index}?password=${password}`, {
+      method: 'DELETE'
+    });
+
+    if (res.ok) {
+      profilesData.memberProfiles[userId].incidents.splice(index, 1);
+      // Re-render la liste d'incidents
+      const incidents = profilesData.memberProfiles[userId].incidents;
+      const container = document.getElementById('incidents-' + userId);
+      if (container) {
+        container.innerHTML = incidents.length === 0
+          ? '<div class="empty-state">Aucun incident enregistré.</div>'
+          : incidents.map((inc, i) => `
+            <div class="incident-item" id="incident-${userId}-${i}">
+              <div>
+                <div class="incident-text">${inc.description || 'Incident sans description'}</div>
+                <div class="incident-date">${new Date(inc.date).toLocaleString('fr-FR')}</div>
+              </div>
+              <button class="incident-del" onclick="deleteIncident('${userId}', ${i})" title="Supprimer">✕</button>
+            </div>
+          `).join('');
+        // Mettre à jour le badge
+        const badge = document.querySelector(`#pcard-${userId} .incident-badge`);
+        if (incidents.length === 0 && badge) badge.remove();
+        else if (badge) badge.textContent = `⚠️ ${incidents.length} incident${incidents.length > 1 ? 's' : ''}`;
+      }
+      showToast('✅ Incident supprimé !');
+    } else {
+      showToast('❌ Erreur lors de la suppression', true);
+    }
+  }
+
+  async function deleteMemberVocab(userId, word) {
+    const res = await fetch(`/api/profiles/${encodeURIComponent(userId)}/vocabulary/${encodeURIComponent(word)}?password=${password}`, {
+      method: 'DELETE'
+    });
+
+    if (res.ok) {
+      delete profilesData.memberProfiles[userId].vocabulary[word];
+      // Re-render vocab du membre
+      const vocab = profilesData.memberProfiles[userId].vocabulary;
+      const topVocab = Object.entries(vocab).sort((a,b) => b[1]-a[1]).slice(0, 15);
+      const container = document.getElementById('vocab-' + userId);
+      if (container) {
+        container.innerHTML = topVocab.length === 0
+          ? '<div class="empty-state">Aucun vocabulaire collecté.</div>'
+          : topVocab.map(([w, count]) => `
+            <span class="vocab-tag">
+              ${w}
+              <span class="vocab-tag-count">×${count}</span>
+              <button class="vocab-del" onclick="deleteMemberVocab('${userId}', '${w}')" title="Supprimer">✕</button>
+            </span>
+          `).join('');
+      }
+      showToast('✅ Mot supprimé !');
+    } else {
+      showToast('❌ Erreur lors de la suppression', true);
+    }
+  }
+
+  // ── VOCABULAIRE GLOBAL ──
+  function renderVocabularyGlobal() {
+    const container = document.getElementById('vocab-global-list');
+    const vocab = profilesData.serverVocabulary || {};
+    const sorted = Object.entries(vocab).sort((a, b) => b[1] - a[1]);
+
+    if (sorted.length === 0) {
+      container.innerHTML = '<div class="empty-state">Aucun vocabulaire collecté.</div>';
+      return;
+    }
+
+    container.innerHTML = sorted.map(([word, count]) => `
+      <div class="vocab-global-tag">
+        <span>${word}</span>
+        <span class="vocab-global-count">×${count}</span>
+        <button class="vocab-global-del" onclick="deleteGlobalVocab('${word}')" title="Supprimer">✕</button>
+      </div>
+    `).join('');
+  }
+
+  async function deleteGlobalVocab(word) {
+    const res = await fetch(`/api/vocabulary/${encodeURIComponent(word)}?password=${password}`, {
+      method: 'DELETE'
+    });
+
+    if (res.ok) {
+      delete profilesData.serverVocabulary[word];
+      renderVocabularyGlobal();
+      showToast('✅ Mot supprimé !');
+    } else {
+      showToast('❌ Erreur lors de la suppression', true);
+    }
+  }
+
+  // ── TOAST ──
   function showToast(msg, error = false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
