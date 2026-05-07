@@ -23,15 +23,22 @@ app.post('/api/login', (req, res) => {
 // ─── Lire la config ────────────────────────────────────────────────────────────
 app.get('/api/config', async (req, res) => {
   const { password } = req.query;
-  if (password !== PANEL_PASSWORD) return res.status(401).json({ error: 'Non autorisé' });
+  const expected = process.env.PANEL_PASSWORD || 'Juptic81';
+  if (password !== expected) {
+    console.log(`Auth échouée: reçu "${password}", attendu "${expected}"`);
+    return res.status(401).json({ error: 'Non autorisé' });
+  }
 
   try {
     const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': JSONBIN_API_KEY }
     });
-    const data = await response.json();
-    res.json(data.record);
+    const text = await response.text();
+    console.log('JSONbin response:', text.slice(0, 200));
+    const data = JSON.parse(text);
+    res.json(data.record || {});
   } catch (e) {
+    console.error('Erreur JSONbin:', e.message);
     res.status(500).json({ error: 'Erreur JSONbin', details: e.message });
   }
 });
