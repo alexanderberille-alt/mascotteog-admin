@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MascotteOG — Panneau Admin</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .login-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 40px;
+      width: 360px;
+      text-align: center;
+    }
+    .login-box h1 { font-size: 1.6rem; margin-bottom: 8px; }
+    .login-box p { color: #8b949e; margin-bottom: 24px; font-size: 0.9rem; }
+    .login-box input {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #e6edf3;
+      font-size: 1rem;
+      margin-bottom: 14px;
+    }
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      background: #238636;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .login-box button:hover { background: #2ea043; }
+    .error-msg { color: #f85149; font-size: 0.85rem; margin-top: 8px; }
+
+    /* ── LAYOUT ── */
+    #app { display: none; }
+    header {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 14px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+    header span { font-size: 1.4rem; }
+    .save-btn {
+      background: #238636;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .save-btn:hover { background: #2ea043; }
+    .save-btn:disabled { background: #30363d; cursor: not-allowed; }
+
+    .container {
+      max-width: 960px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card h2 {
+      font-size: 1rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #e6edf3;
+      font-size: 0.92rem;
+      padding: 12px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.5;
+    }
+    textarea:focus { outline: none; border-color: #58a6ff; }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-bottom: 6px;
+    }
+    .field-group input {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #e6edf3;
+      font-size: 0.92rem;
+      padding: 10px 12px;
+    }
+    .field-group input:focus { outline: none; border-color: #58a6ff; }
+
+    .knowledge-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: flex-start;
+    }
+    .knowledge-item textarea { flex: 1; min-height: 60px; }
+    .del-btn {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #f85149;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .del-btn:hover { background: #30363d; }
+    .add-btn {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #58a6ff;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 6px;
+    }
+    .add-btn:hover { background: #30363d; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #238636;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    .toast.error { background: #b91c1c; }
+
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: #8b949e;
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>🐉 MascotteOG</h1>
+    <p>Panneau d'administration</p>
+    <input type="password" id="pw-input" placeholder="Mot de passe" />
+    <button onclick="login()">Connexion</button>
+    <div class="error-msg" id="login-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <h1><span>🐉</span> MascotteOG — Admin</h1>
+    <button class="save-btn" id="save-btn" onclick="saveConfig()">💾 Sauvegarder</button>
+  </header>
+
+  <div class="container" id="main-content">
+    <div class="loading">Chargement de la configuration...</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let password = '';
+  let config = {};
+
+  // ── LOGIN ──
+  document.getElementById('pw-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') login();
+  });
+
+  async function login() {
+    password = document.getElementById('pw-input').value;
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadConfig();
+    } else {
+      document.getElementById('login-error').textContent = 'Mot de passe incorrect ❌';
+    }
+  }
+
+  // ── LOAD CONFIG ──
+  async function loadConfig() {
+    const res = await fetch(`/api/config?password=${password}`);
+    config = await res.json();
+    renderPanel();
+  }
+
+  // ── RENDER ──
+  function renderPanel() {
+    const c = document.getElementById('main-content');
+    c.innerHTML = `
+      <!-- Personnalité -->
+      <div class="card">
+        <h2>🎭 Personnalité (System Prompt)</h2>
+        <textarea id="persona" rows="10" placeholder="Décris la personnalité de MascotteOG...">${config.persona || ''}</textarea>
+      </div>
+
+      <!-- Connaissances -->
+      <div class="card">
+        <h2>📚 Base de connaissances</h2>
+        <div id="knowledge-list"></div>
+        <button class="add-btn" onclick="addKnowledge()">+ Ajouter une connaissance</button>
+      </div>
+
+      <!-- Paramètres -->
+      <div class="card">
+        <h2>⚙️ Paramètres</h2>
+        <div class="field-row">
+          <div class="field-group">
+            <label>Messages de session (après mention)</label>
+            <input type="number" id="sessionMessages" value="${config.sessionMessages || 10}" min="1" max="50" />
+          </div>
+          <div class="field-group">
+            <label>Modèle Groq</label>
+            <input type="text" id="groqModel" value="${config.groqModel || 'llama3-8b-8192'}" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Infos serveur -->
+      <div class="card">
+        <h2>🏰 Infos serveur HDR</h2>
+        <textarea id="serverInfo" rows="5" placeholder="Infos sur la guilde, le serveur Minecraft, les règles...">${config.serverInfo || ''}</textarea>
+      </div>
+    `;
+
+    renderKnowledge();
+  }
+
+  function renderKnowledge() {
+    const list = document.getElementById('knowledge-list');
+    const items = config.knowledge || [];
+    list.innerHTML = items.map((k, i) => `
+      <div class="knowledge-item">
+        <textarea rows="3" onchange="updateKnowledge(${i}, this.value)">${k}</textarea>
+        <button class="del-btn" onclick="removeKnowledge(${i})">🗑</button>
+      </div>
+    `).join('');
+  }
+
+  function addKnowledge() {
+    if (!config.knowledge) config.knowledge = [];
+    config.knowledge.push('');
+    renderKnowledge();
+  }
+
+  function removeKnowledge(i) {
+    config.knowledge.splice(i, 1);
+    renderKnowledge();
+  }
+
+  function updateKnowledge(i, val) {
+    config.knowledge[i] = val;
+  }
+
+  // ── SAVE ──
+  async function saveConfig() {
+    const btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Sauvegarde...';
+
+    config.persona = document.getElementById('persona').value;
+    config.sessionMessages = parseInt(document.getElementById('sessionMessages').value);
+    config.groqModel = document.getElementById('groqModel').value;
+    config.serverInfo = document.getElementById('serverInfo').value;
+
+    const res = await fetch(`/api/config?password=${password}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config)
+    });
+
+    btn.disabled = false;
+    btn.textContent = '💾 Sauvegarder';
+
+    if (res.ok) {
+      showToast('✅ Configuration sauvegardée !');
+    } else {
+      showToast('❌ Erreur lors de la sauvegarde', true);
+    }
+  }
+
+  function showToast(msg, error = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (error ? ' error' : '');
+    setTimeout(() => t.className = 'toast', 3000);
+  }
+</script>
+</body>
+</html>
