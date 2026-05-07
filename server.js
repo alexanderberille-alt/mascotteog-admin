@@ -36,9 +36,15 @@ app.get('/api/config', authMiddleware, async (req, res) => {
     const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
       headers: { 'X-Master-Key': JSONBIN_API_KEY }
     });
-    const data = await response.json();
-    res.json(data.record || {});
+    const text = await response.text();
+    console.log('JSONbin brut:', text.slice(0, 300));
+    const data = JSON.parse(text);
+    const record = data.record || data || {};
+    console.log('Record envoyé:', JSON.stringify(record).slice(0, 200));
+    res.set('Cache-Control', 'no-store');
+    res.json(record);
   } catch (e) {
+    console.error('Erreur JSONbin:', e.message);
     res.status(500).json({ error: 'Erreur JSONbin', details: e.message });
   }
 });
