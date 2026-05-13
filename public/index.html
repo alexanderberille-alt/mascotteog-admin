@@ -1478,6 +1478,16 @@
       </div>
     `;
     renderKnowledge();
+    if (config.contextFiles && config.contextFiles.length > 0) {
+      attachedFiles = config.contextFiles.map(f => {
+        const blob = new Blob([f.content], { type: 'text/plain' });
+        const file = new File([blob], f.name, { type: 'text/plain' });
+        file.desc = f.desc || '';
+        file.content = f.content;
+        return file;
+      });
+      renderFiles();
+    }
   }
 
   function renderKnowledge() {
@@ -1512,6 +1522,17 @@
     if (sessionEl) config.sessionMessages = parseInt(sessionEl.value);
     if (modelEl) config.groqModel = modelEl.value;
     if (serverInfoEl) config.serverInfo = serverInfoEl.value;
+
+    const filesContent = await Promise.all(attachedFiles.map(f => new Promise((resolve) => {
+      if (f.content !== undefined) {
+        resolve({ name: f.name, desc: f.desc || '', content: f.content });
+      } else {
+        const reader = new FileReader();
+        reader.onload = e => resolve({ name: f.name, desc: f.desc || '', content: e.target.result });
+        reader.readAsText(f);
+      }
+    })));
+    config.contextFiles = filesContent;
 
     const res = await fetch(`/api/config?password=${password}`, {
       method: 'PUT',
